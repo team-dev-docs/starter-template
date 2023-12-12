@@ -1,5 +1,17 @@
 
+
+
+
+
+
 ## Use the Vs Code extension to write normal Markdown
+
+
+
+
+
+
+
 
 If you always struggled to just write normal markdown, rejoice you can use the the VS Code Extensions markdown just like this
 
