@@ -10,14 +10,17 @@ const openApiCongfig = apiConfig.config
 const itemsJson = require("./items.json")
 const footerItems = require("./footerItems.json")
 const logoJson = require('./logo.json')
+const newspace = require('./newspace.js');
 
+
+  
 
 
 
 
 async function loadConfig() {
   const remarkBreaks = await import('./remark-breaks.mjs');
-  
+  const remarkHtml = (await import('remark-html')).default;
 
   /** @type {import('@docusaurus/types').Config} */
   const config = {
@@ -95,7 +98,8 @@ async function loadConfig() {
             editUrl:
               'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
               remarkPlugins: [
-                remarkBreaks.default,
+                newspace,
+                remarkHtml
                 // Other plugins...
               ],
           },

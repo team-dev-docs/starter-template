@@ -15,6 +15,12 @@
 
 If you always struggled to just write normal markdown, rejoice you can use the the VS Code Extensions markdown just like this
 
+
+
+newline
+newline
+newline
+
 ![](/img/dev-docs-assets/dev-docs-RnJpLCAyNSBBdWcgMjAyMyAwMzoxNTo1NCBHTVQ=.png)
 
 To open a markdown file using the extension just right click in the md file and select open Devdocs markdown.
@@ -22,6 +28,7 @@ To open a markdown file using the extension just right click in the md file and 
 ![](/img/dev-docs-assets/dev-docs-RnJpLCAyNSBBdWcgMjAyMyAwMzoxNzozOSBHTVQ=.png)++{style=" width: 100%; height: 32ch;"}
 
 ## Use the editor to docs with Dev-Docs syntax
+
 
 To get the full experience of using the Vs Code Editor we recommend using the Dev-Docs markdown syntax so you use custom styling, and custom components that is only available in Dev-Docs type of markdown.  To do this we add a dev-docs markdown wrapper and then you use the editor.
 
