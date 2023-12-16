@@ -64,6 +64,30 @@ function parseOpenApiInfo(openapiData) {
    }
  }
 
+ function flattenJson(obj, parentKey = '', result = {}) {
+  
+  try {
+    if(typeof obj === 'string') obj = JSON.parse(obj)
+  } catch (error) {
+    console.log("this is the error", error)
+    return {}
+  }
+  for (const [key, value] of Object.entries(obj)) {
+      const newKey = parentKey ? `${parentKey}.${key}` : key;
+
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
+          // Recursively flatten for nested objects
+          flattenJson(value, newKey, result);
+      } else {
+          // Set the key in our result object to the value's type or placeholder
+          result[newKey] = typeof value === 'string' ? value : typeof value;
+      }
+  }
+  return result;
+}
+
+
+
 
 function findMatchingItem(items, metadata) {
     // Check if items is not an array or is empty
@@ -74,7 +98,7 @@ function findMatchingItem(items, metadata) {
     for (const item of items) {
         // Check if the item has a request and matches the metadata
         if (item?.request?.url?.path && metadata?.api?.path) {
-            const pathMatches = `/${item.request.url.path.join("/")}` === metadata.api.path;
+            const pathMatches = `/${item.request.url.path.join("/")}` === metadata.api.path.replace(/{(\w+)}/g, ":$1");
             const methodMatches = item.request.method.toLowerCase() === metadata.api.method.toLowerCase();
 
             if (pathMatches && methodMatches) {
@@ -84,7 +108,7 @@ function findMatchingItem(items, metadata) {
 
         // If the current item has nested items, search recursively
         if (item.item) {
-            console.log("item.item", item.item)
+            // console.log("item.item", item.item)
             const foundItem = findMatchingItem(item.item, metadata);
             if (foundItem) {
                 return foundItem;
@@ -107,9 +131,9 @@ function findMatchingItem(items, metadata) {
     return null;
 }
 
-function generatePostmanItem(item) {
+function generatePostmanItem(item, metadata) {
    try {
-      const yamlData = fs.readFileSync(`examples/${petstore}.yaml`, "utf8");
+      const yamlData = fs.readFileSync(`examples/${item}.yaml`, "utf8");
 
       let conversionResult;
       let errorOccurred = false;
@@ -138,8 +162,10 @@ function generatePostmanItem(item) {
 
         let finalItem = findMatchingItem(flatItems, metadata);
         console.log("finalItem", finalItem != undefined)
-        console.log("finalItem", finalItem)
+        // console.log("finalItem", finalItem)
         metadata.postmanItem = finalItem
+        const template = generateTemplate(metadata.postmanItem);
+        return template
      //  if(metadata.postmanItem) fs.writeFileSync("output.json", JSON.stringify(metadata, null, 2))
      //  return JSON.stringify(metadata, null, 2);
     } catch (err) {
@@ -148,7 +174,47 @@ function generatePostmanItem(item) {
     }
 }
 
-function generateTemplate(metadata) {
+function generateTemplate(data) {
+console.log("this is the data", data)
+  if(!data) return ""
+  console.log(data)
+  let bodyJsonPlacehoder;
+  if(data?.request?.body?.raw) {
+    bodyJsonPlacehoder = flattenJson(data?.request?.body?.raw)
+  } else {
+    bodyJsonPlacehoder = {}
+  }
+  let bodyJson = bodyJsonPlacehoder  || {}
+  var bodyData = JSON.stringify(bodyJson);
+  let url = JSON.stringify(data?.request?.url|| {})
+  let headers = JSON.stringify(data?.request?.header || {})
+
+
+  var encodedBodyData = Buffer.from(bodyData).toString('base64');
+  
+  var encodedUrlData = Buffer.from(url).toString('base64');
+  var encodedHeadersData = Buffer.from(headers).toString('base64');
+   return `
+
+import ApiTabs from "@theme/ApiTabs";
+import DiscriminatorTabs from "@theme/DiscriminatorTabs";
+import MethodEndpoint from "@theme/ApiExplorer/MethodEndpoint";
+import SecuritySchemes from "@theme/ApiExplorer/SecuritySchemes";
+import MimeTabs from "@theme/MimeTabs";
+import ParamsItem from "@theme/ParamsItem";
+import ResponseSamples from "@theme/ResponseSamples";
+import SchemaItem from "@theme/SchemaItem";
+import SchemaTabs from "@theme/SchemaTabs";
+
+import JsonToTable from '@site/src/components/JsonToTable';
+
+
+<JsonToTable data="${encodedUrlData}" />
+<JsonToTable data="${encodedHeadersData}" />
+<JsonToTable data="${encodedBodyData}" />           
+
+
+   `;
    
 }
 
@@ -164,6 +230,7 @@ const apiConfig = {
     },
     markdownGenerators: {
       createApiPageMD: (metadata) => {
+         return generatePostmanItem("pestore", metadata)
          // console.log("metadata", metadata);
          
       },
