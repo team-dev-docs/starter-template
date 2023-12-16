@@ -9,7 +9,17 @@ import {
   TableRow,
 } from "./ui/table";
 
-const JsonToTable = ({ data }) => {
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "./ui/accordion";
+
+// import { Button } from "@/components/ui/button"
+
+
+const JsonToTable = ({ data, title }) => {
   const [decodedData, setDecodedData] = useState({});
 
   useEffect(() => {
@@ -45,6 +55,10 @@ const JsonToTable = ({ data }) => {
     });
 
     return (
+      <Accordion type="single" collapsible className="w-full">
+      <AccordionItem value="item-1">
+        <AccordionTrigger>{title}</AccordionTrigger>
+        <AccordionContent>
       <div key={tableName}>
         <pre>
           <code>{JSON.stringify(decodedData, null, 2)}</code>
@@ -60,6 +74,9 @@ const JsonToTable = ({ data }) => {
         </Table>
         {nestedTables}
       </div>
+      </AccordionContent>
+      </AccordionItem>
+      </Accordion>
     );
   };
 

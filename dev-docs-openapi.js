@@ -209,9 +209,9 @@ import SchemaTabs from "@theme/SchemaTabs";
 import JsonToTable from '@site/src/components/JsonToTable';
 
 
-<JsonToTable data="${encodedUrlData}" />
-<JsonToTable data="${encodedHeadersData}" />
-<JsonToTable data="${encodedBodyData}" />           
+<JsonToTable title="query" data="${encodedUrlData}" />
+<JsonToTable title="headers" data="${encodedHeadersData}" />
+<JsonToTable title="body" data="${encodedBodyData}" />           
 
 
    `;
