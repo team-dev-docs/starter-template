@@ -164,7 +164,8 @@ function generatePostmanItem(item, metadata) {
         console.log("finalItem", finalItem != undefined)
         // console.log("finalItem", finalItem)
         metadata.postmanItem = finalItem
-        const template = generateTemplate(metadata.postmanItem);
+        const template = generateTemplate(metadata.postmanItem, metadata);
+        console.log("this is the metadata", metadata)
         return template
      //  if(metadata.postmanItem) fs.writeFileSync("output.json", JSON.stringify(metadata, null, 2))
      //  return JSON.stringify(metadata, null, 2);
@@ -174,8 +175,24 @@ function generatePostmanItem(item, metadata) {
     }
 }
 
-function generateTemplate(data) {
-console.log("this is the data", data)
+function handleQuery(url) {
+  console.log("this is the url query", url)
+  if(!url.query) return {}
+  let queryJson = {}
+  for (let queryItem of url?.query) {
+    queryJson[queryItem.key] = queryItem
+  }
+  console.log("this is the", queryJson)
+  return queryJson
+}
+
+function handleHeaders() {
+
+}
+
+function generateTemplate(data, metadata) {
+try {
+  console.log("this is the data", data)
   if(!data) return ""
   console.log(data)
   let bodyJsonPlacehoder;
@@ -186,13 +203,17 @@ console.log("this is the data", data)
   }
   let bodyJson = bodyJsonPlacehoder  || {}
   var bodyData = JSON.stringify(bodyJson);
-  let url = JSON.stringify(data?.request?.url|| {})
+  let query = handleQuery(data?.request?.url)
+  console.log("what is the query", query)
+  let url = JSON.stringify(query|| {})
+  console.log("what is the string query", url)
   let headers = JSON.stringify(data?.request?.header || {})
 
 
   var encodedBodyData = Buffer.from(bodyData).toString('base64');
   
   var encodedUrlData = Buffer.from(url).toString('base64');
+  console.log("what is the encoded string query", encodedUrlData)
   var encodedHeadersData = Buffer.from(headers).toString('base64');
    return `
 
@@ -207,14 +228,23 @@ import SchemaItem from "@theme/SchemaItem";
 import SchemaTabs from "@theme/SchemaTabs";
 
 import JsonToTable from '@site/src/components/JsonToTable';
+import QueryTable from '@site/src/components/QueryTable';
 
+# ${metadata.title}
 
-<JsonToTable title="query" data="${encodedUrlData}" />
+${metadata.description}
+
+<QueryTable title="query" data="${encodedUrlData}" />
 <JsonToTable title="headers" data="${encodedHeadersData}" />
 <JsonToTable title="body" data="${encodedBodyData}" />           
 
 
    `;
+
+} catch(e) {
+  console.log(e)
+}
+
    
 }
 

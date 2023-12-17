@@ -112,6 +112,9 @@ html, body {
   /* Styles for elements with a class that starts with "word" */
 }
 
+.thin-scrollbar::-webkit-scrollbar {
+  width: 0 !important;
+}
 
 
 // #__docusaurus {
