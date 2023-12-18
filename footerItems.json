@@ -46,7 +46,8 @@
                 {
                     "label": "GitHub",
                     "href": "https://github.com/facebook/docusaurus",
-                    "prependBaseUrlToHref": false
+                    "prependBaseUrlToHref": false,
+                    "class": "github"
                 }
             ],
             "title": "More"
