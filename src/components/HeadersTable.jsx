@@ -60,9 +60,9 @@ const JsonToTable = ({ data, title, columns }) => {
           <AccordionTrigger>{title}</AccordionTrigger>
           <AccordionContent>
             <div key={tableName}>
-              <pre>
+              {/* <pre>
                 <code>{JSON.stringify(decodedData, null, 2)}</code>
-              </pre>
+              </pre> */}
               <Table>
 
                 <TableBody>{tableRows}</TableBody>
@@ -75,7 +75,15 @@ const JsonToTable = ({ data, title, columns }) => {
     );
   };
 
-  return <div>{renderTable(decodedData)}</div>;
+return (
+    <div>
+        {decodedData && Object.keys(decodedData).length > 0 ? (
+            renderTable(decodedData)
+        ) : (
+            <p>No data available.</p>
+        )}
+    </div>
+);
 };
 
 export default JsonToTable;
