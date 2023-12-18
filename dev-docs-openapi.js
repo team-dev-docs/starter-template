@@ -72,6 +72,7 @@ function parseOpenApiInfo(openapiData) {
     console.log("this is the error", error)
     return {}
   }
+  console.log("this is the object", obj)
   for (const [key, value] of Object.entries(obj)) {
       const newKey = parentKey ? `${parentKey}.${key}` : key;
 
@@ -186,8 +187,14 @@ function handleQuery(url) {
   return queryJson
 }
 
-function handleHeaders() {
-
+function handleHeaders(headers) {
+  if(!headers) return {}
+  let headerJson = {}
+  for (let header of headers) {
+    headerJson[header.key] = header
+  }
+  console.log("this is the", headerJson )
+  return headerJson 
 }
 
 function generateTemplate(data, metadata) {
@@ -204,10 +211,9 @@ try {
   let bodyJson = bodyJsonPlacehoder  || {}
   var bodyData = JSON.stringify(bodyJson);
   let query = handleQuery(data?.request?.url)
-  console.log("what is the query", query)
+  let headersData = handleHeaders(data?.request?.header)
   let url = JSON.stringify(query|| {})
-  console.log("what is the string query", url)
-  let headers = JSON.stringify(data?.request?.header || {})
+  let headers = JSON.stringify(headersData|| {})
 
 
   var encodedBodyData = Buffer.from(bodyData).toString('base64');
@@ -229,13 +235,14 @@ import SchemaTabs from "@theme/SchemaTabs";
 
 import JsonToTable from '@site/src/components/JsonToTable';
 import QueryTable from '@site/src/components/QueryTable';
+import HeadersTable from '@site/src/components/HeadersTable';
 
 # ${metadata.title}
 
 ${metadata.description}
 
 <QueryTable title="query" data="${encodedUrlData}" />
-<JsonToTable title="headers" data="${encodedHeadersData}" />
+<HeadersTable title="headers" data="${encodedHeadersData}" />
 <JsonToTable title="body" data="${encodedBodyData}" />           
 
 
