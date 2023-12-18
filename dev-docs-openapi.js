@@ -69,10 +69,10 @@ function parseOpenApiInfo(openapiData) {
   try {
     if(typeof obj === 'string') obj = JSON.parse(obj)
   } catch (error) {
-    console.log("this is the error", error)
+    // console.log("this is the error", error)
     return {}
   }
-  console.log("this is the object", obj)
+  // console.log("this is the object", obj)
   for (const [key, value] of Object.entries(obj)) {
       const newKey = parentKey ? `${parentKey}.${key}` : key;
 
@@ -125,8 +125,8 @@ function findMatchingItem(items, metadata) {
       }
    })
 
-   console.log("this is justUrls", justUrls)
-   console.log("this is metadata",  metadata.api.path)   
+  //  console.log("this is justUrls", justUrls)
+  //  console.log("this is metadata",  metadata.api.path)   
 
     // Return null if no matching item is found
     return null;
@@ -162,11 +162,11 @@ function generatePostmanItem(item, metadata) {
       }
 
         let finalItem = findMatchingItem(flatItems, metadata);
-        console.log("finalItem", finalItem != undefined)
+        // console.log("finalItem", finalItem != undefined)
         // console.log("finalItem", finalItem)
         metadata.postmanItem = finalItem
         const template = generateTemplate(metadata.postmanItem, metadata);
-        console.log("this is the metadata", metadata)
+        // console.log("this is the metadata", metadata)
         return template
      //  if(metadata.postmanItem) fs.writeFileSync("output.json", JSON.stringify(metadata, null, 2))
      //  return JSON.stringify(metadata, null, 2);
@@ -177,13 +177,13 @@ function generatePostmanItem(item, metadata) {
 }
 
 function handleQuery(url) {
-  console.log("this is the url query", url)
+  // console.log("this is the url query", url)
   if(!url.query) return {}
   let queryJson = {}
   for (let queryItem of url?.query) {
     queryJson[queryItem.key] = queryItem
   }
-  console.log("this is the", queryJson)
+  // console.log("this is the", queryJson)
   return queryJson
 }
 
@@ -193,15 +193,55 @@ function handleHeaders(headers) {
   for (let header of headers) {
     headerJson[header.key] = header
   }
-  console.log("this is the", headerJson )
+  // console.log("this is the", headerJson )
   return headerJson 
+}
+
+function handleMetadataBody(bodyJson, decodedJSON) {
+  console.log("this is the decodedJSON", decodedJSON)
+
+  try {
+    if(!decodedJSON) return bodyJson
+    if (!decodedJSON["application/json"]?.schema) return bodyJson
+    let schema = decodedJSON["application/json"].schema;
+    let propertiesSchemaKeys = Object.keys(schema);
+  console.log(schema)
+    let propertiesItem;
+    if(schema.properties) {
+      propertiesItem = schema
+    } else if(schema.items) {
+      propertiesItem = schema.items
+    } else {
+      for (let i = 0; i < propertiesSchemaKeys.length; i++) {
+        let key = propertiesSchemaKeys[i];
+        let value = schema[key].find(
+          (item) => item.properties != undefined
+        );
+        if (value) propertiesItem = value;
+      }
+    }
+  
+  
+    let { properties } = propertiesItem;
+    // let descriptions = [];
+    for (let [key, value] of Object.entries(properties)) {
+      bodyJson[key] = value
+    }
+    return bodyJson
+
+  } catch(e) {
+    console.log(e)
+    return bodyJson
+  }
+
+
 }
 
 function generateTemplate(data, metadata) {
 try {
-  console.log("this is the data", data)
+  // console.log("this is the data", data)
   if(!data) return ""
-  console.log(data)
+  // console.log(data)
   let bodyJsonPlacehoder;
   if(data?.request?.body?.raw) {
     bodyJsonPlacehoder = flattenJson(data?.request?.body?.raw)
@@ -209,18 +249,22 @@ try {
     bodyJsonPlacehoder = {}
   }
   let bodyJson = bodyJsonPlacehoder  || {}
+  if(Object.keys(bodyJson).length > 0) bodyJson = handleMetadataBody(bodyJson, metadata?.api?.requestBody?.content)
+
   var bodyData = JSON.stringify(bodyJson);
   let query = handleQuery(data?.request?.url)
   let headersData = handleHeaders(data?.request?.header)
   let url = JSON.stringify(query|| {})
   let headers = JSON.stringify(headersData|| {})
-
+  let fullMetadataBody = JSON.stringify(metadata?.api?.requestBody || {})
 
   var encodedBodyData = Buffer.from(bodyData).toString('base64');
   
   var encodedUrlData = Buffer.from(url).toString('base64');
   console.log("what is the encoded string query", encodedUrlData)
   var encodedHeadersData = Buffer.from(headers).toString('base64');
+  var encodedMetadata = Buffer.from(fullMetadataBody).toString('base64')
+
    return `
 
 import ApiTabs from "@theme/ApiTabs";
@@ -234,8 +278,10 @@ import SchemaItem from "@theme/SchemaItem";
 import SchemaTabs from "@theme/SchemaTabs";
 
 import JsonToTable from '@site/src/components/JsonToTable';
+import BodyTable from '@site/src/components/BodyTable';
 import QueryTable from '@site/src/components/QueryTable';
 import HeadersTable from '@site/src/components/HeadersTable';
+import DisplayJson from '@site/src/components/DisplayJson';
 
 # ${metadata.title}
 
@@ -243,7 +289,8 @@ ${metadata.description}
 
 <QueryTable title="query" data="${encodedUrlData}" />
 <HeadersTable title="headers" data="${encodedHeadersData}" />
-<JsonToTable title="body" data="${encodedBodyData}" />           
+<BodyTable title="body" data="${encodedBodyData}" />
+<DisplayJson title="Whole Request" data="${encodedMetadata}" />             
 
 
    `;

@@ -37,6 +37,7 @@ const JsonToTable = ({ data, title, columns }) => {
       try {
         const decoded64JSON = atob(data);
         const decodedJSON = JSON.parse(decoded64JSON);
+        console.log("this is the new decoded body", decoded64JSON)
         setDecodedData(decodedJSON);
       } catch (error) {
         console.error('Error parsing JSON:', error);

@@ -24,8 +24,10 @@ import SchemaItem from "@theme/SchemaItem";
 import SchemaTabs from "@theme/SchemaTabs";
 
 import JsonToTable from '@site/src/components/JsonToTable';
+import BodyTable from '@site/src/components/BodyTable';
 import QueryTable from '@site/src/components/QueryTable';
 import HeadersTable from '@site/src/components/HeadersTable';
+import DisplayJson from '@site/src/components/DisplayJson';
 
 # Finds Pets by status
 
@@ -33,7 +35,8 @@ Multiple status values can be provided with comma separated strings
 
 <QueryTable title="query" data="eyJzdGF0dXMiOnsiZGlzYWJsZWQiOmZhbHNlLCJrZXkiOiJzdGF0dXMiLCJ2YWx1ZSI6ImF2YWlsYWJsZSIsImRlc2NyaXB0aW9uIjoiKFJlcXVpcmVkKSBTdGF0dXMgdmFsdWVzIHRoYXQgbmVlZCB0byBiZSBjb25zaWRlcmVkIGZvciBmaWx0ZXIifX0=" />
 <HeadersTable title="headers" data="eyJBY2NlcHQiOnsia2V5IjoiQWNjZXB0IiwidmFsdWUiOiJhcHBsaWNhdGlvbi9qc29uIn19" />
-<JsonToTable title="body" data="e30=" />           
+<BodyTable title="body" data="e30=" />
+<DisplayJson title="Whole Request" data="e30=" />             
 
 
    

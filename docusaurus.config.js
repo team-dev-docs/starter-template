@@ -137,7 +137,7 @@ const config = {
       footer: {
         style: 'dark',
         links: [...footerItems.links],
-        copyright: `${new Date().getFullYear()} Dev-Docs`,
+        copyright: `Super Charged by Dev-Docs`,
       },
       prism: {
         theme: lightCodeTheme,
