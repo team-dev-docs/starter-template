@@ -81,7 +81,11 @@ function parseOpenApiInfo(openapiData) {
           flattenJson(value, newKey, result);
       } else {
           // Set the key in our result object to the value's type or placeholder
-          result[newKey] = typeof value === 'string' ? value : typeof value;
+          if(newKey.includes(".")) {
+            let splitKey = newKey.split(".")[0].trim()
+            result[splitKey] = typeof value === 'string' ? value : typeof value;
+          }
+           else { result[newKey] = typeof value === 'string' ? value : typeof value}
       }
   }
   return result;
@@ -225,7 +229,8 @@ function handleMetadataBody(bodyJson, decodedJSON) {
     let { properties } = propertiesItem;
     // let descriptions = [];
     for (let [key, value] of Object.entries(properties)) {
-      bodyJson[key] = value
+      console.log("this is the bodyJson", bodyJson[key])
+      bodyJson[key] = {...value, type: bodyJson[key] }
     }
     return bodyJson
 

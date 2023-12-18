@@ -16,6 +16,14 @@ import {
   AccordionTrigger,
 } from "./ui/accordion";
 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
 
 // import { Button } from "@/components/ui/button"
 
@@ -41,49 +49,58 @@ const JsonToTable = ({ data, title, columns }) => {
     const nestedTables = [];
 
     const iteratedTableRows = Object.entries(json).map(([key, value]) => {
+      if (value.type || value.description) {
         return (
           <TableRow key={key}>
             <TableCell>
-              <h4><span className="font-medium">{key}</span> {value.value}</h4>
+              <h4>
+                <span className="font-medium">{key}</span> {value.type}
+              </h4>
               <p>{value.description}</p>
             </TableCell>
           </TableRow>
         );
-      
+      }
+      return null;
     });
 
     let tableRows = [...iteratedTableRows];
 
     return (
-      <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="item-1">
-          <AccordionTrigger>{title}</AccordionTrigger>
-          <AccordionContent>
-            <div key={tableName}>
-              {/* <pre>
-                <code>{JSON.stringify(decodedData, null, 2)}</code>
-              </pre> */}
-              <Table>
-
-                <TableBody>{tableRows}</TableBody>
-              </Table>
-              {nestedTables}
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
+      <>
+        <Table>
+          <TableBody>{tableRows}</TableBody>
+        </Table>
+        {nestedTables}
+      </>
     );
   };
 
   return (
-    <div>
-        {decodedData && Object.keys(decodedData).length > 0 ? (
-            renderTable(decodedData)
-        ) : (
-            <p></p>
-        )}
-    </div>
-);
+    <>
+      {decodedData && Object.keys(decodedData).length > 0 && (
+        <Accordion type="single" collapsible className="w-full">
+          <AccordionItem value="item-1">
+            <AccordionTrigger>{title}</AccordionTrigger>
+            <AccordionContent>
+              <Card>
+                <CardHeader>
+                  <CardDescription>body params</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {decodedData && Object.keys(decodedData).length > 0 ? (
+                    renderTable(decodedData)
+                  ) : (
+                    <p></p>
+                  )}
+                </CardContent>
+              </Card>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      )}
+    </>
+  );
 };
 
 export default JsonToTable;
