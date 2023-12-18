@@ -28,11 +28,13 @@ import BodyTable from '@site/src/components/BodyTable';
 import QueryTable from '@site/src/components/QueryTable';
 import HeadersTable from '@site/src/components/HeadersTable';
 import DisplayJson from '@site/src/components/DisplayJson';
+import DisplayEndpoint from '@site/src/components/DisplayEndpoint';
 
 # Subscribe to the Store events
 
 Add subscription for a store events
 
+<DisplayEndpoint method="post" endpoint="/store/subscribe"/>
 <QueryTable title="query" data="e30=" />
 <HeadersTable title="headers" data="eyJDb250ZW50LVR5cGUiOnsia2V5IjoiQ29udGVudC1UeXBlIiwidmFsdWUiOiJhcHBsaWNhdGlvbi9qc29uIn0sIkFjY2VwdCI6eyJrZXkiOiJBY2NlcHQiLCJ2YWx1ZSI6ImFwcGxpY2F0aW9uL2pzb24ifX0=" />
 <BodyTable title="body" data="eyJjYWxsYmFja1VybCI6eyJ0eXBlIjoiPHVyaT4iLCJmb3JtYXQiOiJ1cmkiLCJkZXNjcmlwdGlvbiI6IlRoaXMgVVJMIHdpbGwgYmUgY2FsbGVkIGJ5IHRoZSBzZXJ2ZXIgd2hlbiB0aGUgZGVzaXJlZCBldmVudCB3aWxsIG9jY3VyIiwiZXhhbXBsZSI6Imh0dHBzOi8vbXlzZXJ2ZXIuY29tL3NlbmQvY2FsbGJhY2svaGVyZSJ9LCJldmVudE5hbWUiOnsidHlwZSI6IjxzdHJpbmc+IiwiZGVzY3JpcHRpb24iOiJFdmVudCBuYW1lIGZvciB0aGUgc3Vic2NyaXB0aW9uIiwiZW51bSI6WyJvcmRlckluUHJvZ3Jlc3MiLCJvcmRlclNoaXBwZWQiLCJvcmRlckRlbGl2ZXJlZCJdLCJleGFtcGxlIjoib3JkZXJJblByb2dyZXNzIn19" />

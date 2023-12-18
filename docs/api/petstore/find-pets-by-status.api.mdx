@@ -28,11 +28,13 @@ import BodyTable from '@site/src/components/BodyTable';
 import QueryTable from '@site/src/components/QueryTable';
 import HeadersTable from '@site/src/components/HeadersTable';
 import DisplayJson from '@site/src/components/DisplayJson';
+import DisplayEndpoint from '@site/src/components/DisplayEndpoint';
 
 # Finds Pets by status
 
 Multiple status values can be provided with comma separated strings
 
+<DisplayEndpoint method="get" endpoint="/pet/findByStatus"/>
 <QueryTable title="query" data="eyJzdGF0dXMiOnsiZGlzYWJsZWQiOmZhbHNlLCJrZXkiOiJzdGF0dXMiLCJ2YWx1ZSI6ImF2YWlsYWJsZSIsImRlc2NyaXB0aW9uIjoiKFJlcXVpcmVkKSBTdGF0dXMgdmFsdWVzIHRoYXQgbmVlZCB0byBiZSBjb25zaWRlcmVkIGZvciBmaWx0ZXIifX0=" />
 <HeadersTable title="headers" data="eyJBY2NlcHQiOnsia2V5IjoiQWNjZXB0IiwidmFsdWUiOiJhcHBsaWNhdGlvbi9qc29uIn19" />
 <BodyTable title="body" data="e30=" />

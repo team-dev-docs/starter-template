@@ -287,11 +287,13 @@ import BodyTable from '@site/src/components/BodyTable';
 import QueryTable from '@site/src/components/QueryTable';
 import HeadersTable from '@site/src/components/HeadersTable';
 import DisplayJson from '@site/src/components/DisplayJson';
+import DisplayEndpoint from '@site/src/components/DisplayEndpoint';
 
 # ${metadata.title}
 
 ${metadata.description}
 
+<DisplayEndpoint method="${metadata.api.method}" endpoint="${metadata.api.path}"/>
 <QueryTable title="query" data="${encodedUrlData}" />
 <HeadersTable title="headers" data="${encodedHeadersData}" />
 <BodyTable title="body" data="${encodedBodyData}" />

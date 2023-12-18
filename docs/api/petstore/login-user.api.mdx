@@ -28,11 +28,13 @@ import BodyTable from '@site/src/components/BodyTable';
 import QueryTable from '@site/src/components/QueryTable';
 import HeadersTable from '@site/src/components/HeadersTable';
 import DisplayJson from '@site/src/components/DisplayJson';
+import DisplayEndpoint from '@site/src/components/DisplayEndpoint';
 
 # Logs user into the system
 
 
 
+<DisplayEndpoint method="get" endpoint="/user/login"/>
 <QueryTable title="query" data="eyJ1c2VybmFtZSI6eyJkaXNhYmxlZCI6ZmFsc2UsImtleSI6InVzZXJuYW1lIiwidmFsdWUiOiI8c3RyaW5nPiIsImRlc2NyaXB0aW9uIjoiKFJlcXVpcmVkKSBUaGUgdXNlciBuYW1lIGZvciBsb2dpbiJ9LCJwYXNzd29yZCI6eyJkaXNhYmxlZCI6ZmFsc2UsImtleSI6InBhc3N3b3JkIiwidmFsdWUiOiI8c3RyaW5nPiIsImRlc2NyaXB0aW9uIjoiKFJlcXVpcmVkKSBUaGUgcGFzc3dvcmQgZm9yIGxvZ2luIGluIGNsZWFyIHRleHQifX0=" />
 <HeadersTable title="headers" data="eyJBY2NlcHQiOnsia2V5IjoiQWNjZXB0IiwidmFsdWUiOiJhcHBsaWNhdGlvbi9qc29uIn19" />
 <BodyTable title="body" data="e30=" />

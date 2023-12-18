@@ -28,11 +28,13 @@ import BodyTable from '@site/src/components/BodyTable';
 import QueryTable from '@site/src/components/QueryTable';
 import HeadersTable from '@site/src/components/HeadersTable';
 import DisplayJson from '@site/src/components/DisplayJson';
+import DisplayEndpoint from '@site/src/components/DisplayEndpoint';
 
 # Find pet by ID
 
 Returns a single pet
 
+<DisplayEndpoint method="get" endpoint="/pet/{petId}"/>
 <QueryTable title="query" data="e30=" />
 <HeadersTable title="headers" data="eyJBY2NlcHQiOnsia2V5IjoiQWNjZXB0IiwidmFsdWUiOiJhcHBsaWNhdGlvbi9qc29uIn19" />
 <BodyTable title="body" data="e30=" />

@@ -28,11 +28,13 @@ import BodyTable from '@site/src/components/BodyTable';
 import QueryTable from '@site/src/components/QueryTable';
 import HeadersTable from '@site/src/components/HeadersTable';
 import DisplayJson from '@site/src/components/DisplayJson';
+import DisplayEndpoint from '@site/src/components/DisplayEndpoint';
 
 # Deletes a pet
 
 
 
+<DisplayEndpoint method="delete" endpoint="/pet/{petId}"/>
 <QueryTable title="query" data="e30=" />
 <HeadersTable title="headers" data="eyJhcGlfa2V5Ijp7ImRpc2FibGVkIjpmYWxzZSwia2V5IjoiYXBpX2tleSIsInZhbHVlIjoiPHN0cmluZz4iLCJkZXNjcmlwdGlvbiI6IiJ9fQ==" />
 <BodyTable title="body" data="e30=" />

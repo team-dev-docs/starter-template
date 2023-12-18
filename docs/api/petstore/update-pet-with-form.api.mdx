@@ -28,11 +28,13 @@ import BodyTable from '@site/src/components/BodyTable';
 import QueryTable from '@site/src/components/QueryTable';
 import HeadersTable from '@site/src/components/HeadersTable';
 import DisplayJson from '@site/src/components/DisplayJson';
+import DisplayEndpoint from '@site/src/components/DisplayEndpoint';
 
 # Updates a pet in the store with form data
 
 
 
+<DisplayEndpoint method="post" endpoint="/pet/{petId}"/>
 <QueryTable title="query" data="e30=" />
 <HeadersTable title="headers" data="eyJDb250ZW50LVR5cGUiOnsia2V5IjoiQ29udGVudC1UeXBlIiwidmFsdWUiOiJhcHBsaWNhdGlvbi94LXd3dy1mb3JtLXVybGVuY29kZWQifX0=" />
 <BodyTable title="body" data="e30=" />

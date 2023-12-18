@@ -28,11 +28,13 @@ import BodyTable from '@site/src/components/BodyTable';
 import QueryTable from '@site/src/components/QueryTable';
 import HeadersTable from '@site/src/components/HeadersTable';
 import DisplayJson from '@site/src/components/DisplayJson';
+import DisplayEndpoint from '@site/src/components/DisplayEndpoint';
 
 # Delete purchase order by ID
 
 For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
 
+<DisplayEndpoint method="delete" endpoint="/store/order/{orderId}"/>
 <QueryTable title="query" data="e30=" />
 <HeadersTable title="headers" data="e30=" />
 <BodyTable title="body" data="e30=" />
