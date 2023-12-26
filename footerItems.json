@@ -6,20 +6,23 @@
                     "label": "Instagram",
                     "href": "https://www.instagram.com",
                     "position": "left",
-                    "prependBaseUrlToHref": false,
-                    "class": "instagram social"
+                    "prependBaseUrlToHref": false
+                },
+                {
+                    "label": "X",
+                    "href": "https://x.com",
+                    "position": "left",
+                    "prependBaseUrlToHref": false
                 },
                 {
                     "label": "GitHub",
-                    "href": "https://github.com/facebook/docusaurus",
-                    "prependBaseUrlToHref": false,
-                    "class": "github social"
+                    "href": "https://github.com",
+                    "prependBaseUrlToHref": false
                 },
                 {
                     "label": "Discord",
-                    "href": "https://github.com/facebook/docusaurus",
-                    "prependBaseUrlToHref": false,
-                    "class": "discord social"
+                    "href": "https://discord.com",
+                    "prependBaseUrlToHref": false
                 }
             ],
             "title": "Social"
