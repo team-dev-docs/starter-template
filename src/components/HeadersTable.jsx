@@ -30,6 +30,24 @@ import {
 // need a place to put
 const JsonToTable = ({ data, title, columns }) => {
   const [decodedData, setDecodedData] = useState({});
+  const [tableHeaderdata, setTableHeaderData] = useState([
+    {
+      id: 1,
+      name: 'Parameter',
+    },
+    {
+      id: 2,
+      name: 'Value',
+    },
+    {
+      id: 3,
+      name: 'Data type',
+    },
+    {
+      id: 4,
+      name: 'Required?',
+    }
+  ]);
 
   useEffect(() => {
     if (data) {
@@ -49,17 +67,15 @@ const JsonToTable = ({ data, title, columns }) => {
 
     const nestedTables = [];
 
-    const iteratedTableRows = Object.entries(json).map(([key, value]) => {
+    const iteratedTableRows = Object.entries(json).map(([key, value], index) => {
       console.log("what is the header value", value)
       if (value.value) {
         return (
-          <TableRow key={key}>
-            <TableCell>
-              <h4>
-                <span className="font-medium">{key}</span> string
-              </h4>
-              <p>{value.value}</p>
-            </TableCell>
+          <TableRow key={key} className={index % 2 === 0 ? 'table-row-even': 'table-row-odd'}>
+            <TableCell><span className="font-bold text-md font-medium">{key}</span></TableCell>
+            <TableCell className="w-[300px]">{value.value}</TableCell>
+            <TableCell>string</TableCell>
+            <TableCell>Yes</TableCell>
           </TableRow>
         );
       }
@@ -71,6 +87,19 @@ const JsonToTable = ({ data, title, columns }) => {
     return (
       <>
         <Table>
+          {
+            tableHeaderdata.length > 0 && <TableHeader>
+              <TableRow>
+                {
+                  tableHeaderdata.map((item) => {
+                    return (
+                      <TableHead>{item.name}</TableHead>
+                    )
+                  })
+                }
+              </TableRow>
+            </TableHeader>
+          }
           <TableBody>{tableRows}</TableBody>
         </Table>
         {nestedTables}
@@ -81,25 +110,23 @@ const JsonToTable = ({ data, title, columns }) => {
   return (
     <>
       {decodedData && Object.keys(decodedData).length > 0 && (
-          <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="item-1">
-              <AccordionTrigger>{title}</AccordionTrigger>
-              <AccordionContent>
-                <Card>
-                  <CardHeader>
-                    <CardDescription>header params</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    {decodedData && Object.keys(decodedData).length > 0 ? (
-                      renderTable(decodedData)
-                    ) : (
-                      <p></p>
-                    )}
-                  </CardContent>
-                </Card>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+        <AccordionItem value="headers-table">
+          <AccordionTrigger>{title}</AccordionTrigger>
+          <AccordionContent>
+            <Card>
+              <CardHeader>
+                <CardDescription></CardDescription>
+              </CardHeader>
+              <CardContent>
+                {decodedData && Object.keys(decodedData).length > 0 ? (
+                  renderTable(decodedData)
+                ) : (
+                  <p></p>
+                )}
+              </CardContent>
+            </Card>
+          </AccordionContent>
+        </AccordionItem>
       )}
     </>
   );

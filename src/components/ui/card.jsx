@@ -1,6 +1,15 @@
-import * as React from "react"
+import * as React from "react";
+import { unified } from 'unified';
+import markdown from 'remark-parse';
+import remark2rehype from 'remark-rehype';
+import rehype2react from 'rehype-react';
 
 import { cn } from "@site/src/utils"
+
+const processor = unified()
+  .use(markdown)
+  .use(remark2rehype)
+  .use(rehype2react, { createElement: React.createElement });
 
 const Card = React.forwardRef(({ className, ...props }, ref) => (
   <div
@@ -18,96 +27,73 @@ const CardHeader = React.forwardRef(({ className, ...props }, ref) => (
 ))
 CardHeader.displayName = "CardHeader"
 
-const CardTitle = React.forwardRef(({ className, ...props }, ref) => (
+const CardTitle = React.forwardRef(({ className, children, ...props }, ref) => (
   <h3
     ref={ref}
     className={cn("text-2xl font-semibold leading-none tracking-tight", className)}
-    {...props} />
+    {...props}>
+      {processor.processSync(children).result}
+  </h3>
 ))
 CardTitle.displayName = "CardTitle"
 
-const CardDescription = React.forwardRef(({ className, ...props }, ref) => (
+const CardDescription = React.forwardRef(({ className, children, ...props }, ref) => (
   <p
     ref={ref}
     className={cn("text-sm text-muted-foreground", className)}
-    {...props} />
+    {...props}>
+      {children}
+    </p>
 ))
 CardDescription.displayName = "CardDescription"
 
-const CardContent = React.forwardRef(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
+const CardContent = React.forwardRef(({ className, children, ...props }, ref) => (
+  <div ref={ref} className={cn("p-6 pt-0", className)} {...props}>
+    {children}
+  </div>
 ))
 CardContent.displayName = "CardContent"
 
-const CardFooter = React.forwardRef(({ className, ...props }, ref) => (
+const CardFooter = React.forwardRef(({ className, children, ...props }, ref) => (
   <div
     ref={ref}
     className={cn("flex items-center p-6 pt-0", className)}
-    {...props} />
+    {...props}>
+      {children}
+  </div>
 ))
 CardFooter.displayName = "CardFooter"
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+const processChildren = (children) => {
+  const processedChildren = React.Children.toArray(children).map((child) => {
+    if (typeof child === 'string') {
+      const singleLineString = child.replace(/\\n/g, '\\\\n');
+      return mdProcessor.processSync(singleLineString).result;
+    } else {
+      return child;
+    }
+  });
 
+  return processedChildren;
+};
 
+const DevDocsCard = React.forwardRef(({ className, children, ...props }, ref) => (
+  <Card>
+    <CardHeader>
+        <CardTitle>
+          {props.title}
+        </CardTitle>
+        <CardDescription>
+          {props.description}
+        </CardDescription>
+    </CardHeader>
+    <CardContent>
+      {processChildren(children)}
+    </CardContent>
+    <CardFooter>
+      {props.footer}
+    </CardFooter>
+</Card>
+))
 
-
-// import * as React from "react"
-
-// import { Button } from "@/components/ui/button"
-// import {
-//   Card,
-//   CardContent,
-//   CardDescription,
-//   CardFooter,
-//   CardHeader,
-//   CardTitle,
-// } from "@/components/ui/card"
-// import { Input } from "@/components/ui/input"
-// import { Label } from "@/components/ui/label"
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select"
-
-// export function CardWithForm() {
-//   return (
-//     <Card className="w-[350px]">
-//       <CardHeader>
-//         <CardTitle>Create project</CardTitle>
-//         <CardDescription>Deploy your new project in one-click.</CardDescription>
-//       </CardHeader>
-//       <CardContent>
-//         <form>
-//           <div className="grid w-full items-center gap-4">
-//             <div className="flex flex-col space-y-1.5">
-//               <Label htmlFor="name">Name</Label>
-//               <Input id="name" placeholder="Name of your project" />
-//             </div>
-//             <div className="flex flex-col space-y-1.5">
-//               <Label htmlFor="framework">Framework</Label>
-//               <Select>
-//                 <SelectTrigger id="framework">
-//                   <SelectValue placeholder="Select" />
-//                 </SelectTrigger>
-//                 <SelectContent position="popper">
-//                   <SelectItem value="next">Next.js</SelectItem>
-//                   <SelectItem value="sveltekit">SvelteKit</SelectItem>
-//                   <SelectItem value="astro">Astro</SelectItem>
-//                   <SelectItem value="nuxt">Nuxt.js</SelectItem>
-//                 </SelectContent>
-//               </Select>
-//             </div>
-//           </div>
-//         </form>
-//       </CardContent>
-//       <CardFooter className="flex justify-between">
-//         <Button variant="outline">Cancel</Button>
-//         <Button>Deploy</Button>
-//       </CardFooter>
-//     </Card>
-//   )
-// }
+export { DevDocsCard, Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }

@@ -75,18 +75,16 @@ const JsonToTable = ({ data, title, columns }) => {
     let tableRows = [...iteratedTableRows];
 
     return (
-      <Accordion type="single" collapsible className="w-full">
-        <AccordionItem value="item-1">
-          <AccordionTrigger>{title}</AccordionTrigger>
-          <AccordionContent>
-            <div key={tableName}>
-              <pre>
-                <code>{JSON.stringify(decodedData, null, 2)}</code>
-              </pre>
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
+      <AccordionItem value="display-json">
+        <AccordionTrigger>{title}</AccordionTrigger>
+        <AccordionContent>
+          <div key={tableName}>
+            <pre>
+              <code>{JSON.stringify(decodedData, null, 2)}</code>
+            </pre>
+          </div>
+        </AccordionContent>
+      </AccordionItem>
     );
   };
 
