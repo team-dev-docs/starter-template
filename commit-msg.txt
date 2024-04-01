@@ -1,2 +1,2 @@
-gets rid of landing page
+starter template
 
