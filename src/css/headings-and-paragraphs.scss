@@ -197,15 +197,3 @@ a:hover {
   "Noto Sans", sans-serif, "system-ui", "Segoe UI", Helvetica, Arial,
   sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !important;
 }
-
-// Reset ordered list styles
-ol {
-  list-style-type: decimal !important;
-  padding-left: 1.2em;
-}
-
-// Adjust padding and margin for nested ordered lists
-ol ol {
-  padding-left: 1.2em;
-  margin-bottom: 0;
-}

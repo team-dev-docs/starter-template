@@ -85,7 +85,7 @@ body {
 
 
 .markdown {
-  // li {
-  //   @apply list-disc list-inside;
-  // }
+  li {
+    @apply list-disc list-inside;
+  }
 }
