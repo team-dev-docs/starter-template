@@ -1,5 +1,10 @@
 import React from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs"
+
+
+
+
+
 
 function findPreElements(children) {
   let preElements = [];
@@ -59,7 +64,7 @@ const CodeSnippets = (props) => {
   const { triggers, contents } = parseCodeSnippets(props.children);
 
   return (
-    <div className="mt-[1em] text-sm">
+    <div className="mt-[1em]">
       <Tabs defaultValue={triggers.length > 0 ? triggers[0].props.value : ''}>
         <TabsList>
           {triggers}
