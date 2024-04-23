@@ -1,2 +1,3 @@
-starter template
+Merge pull request #2 from team-dev-docs/docs_components_update
 
+Docs components update
