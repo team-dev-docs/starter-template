@@ -22,6 +22,12 @@
 @import "./cards.scss";
 @import "./blog.scss";
 
+@layer base {
+    ul, ol {
+      list-style: revert;
+    }
+  }
+
 // //add this to your custom.scss file to change the color of the code blocks
 
 // //add styling .scss for docusaurus toc to be sticky on the right side of the page and scrollable
