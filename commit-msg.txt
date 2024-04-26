@@ -1,3 +1,2 @@
-Merge pull request #3 from team-dev-docs/docs_css_update
+fixes ordering
 
-Docs css update
