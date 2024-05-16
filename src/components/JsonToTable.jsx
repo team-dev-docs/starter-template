@@ -1,108 +1,131 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "./ui/table";
+import zlib from 'zlib';
+import { useDoc } from '@docusaurus/theme-common/internal';
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "./ui/accordion";
-
-import { unified } from 'unified';
-import markdown from 'remark-parse';
-import remark2rehype from 'remark-rehype';
-import rehype2react from 'rehype-react';
-
-const processor = unified()
-  .use(markdown)
-  .use(remark2rehype)
-  .use(rehype2react, { createElement: React.createElement });
-
-// import { Button } from "@/components/ui/button"
-
-// need a place to put 
-const JsonToTable = ({ data, title, columns }) => {
+const JsonToTable = () => {
   const [decodedData, setDecodedData] = useState({});
 
+  const { frontMatter } = useDoc();
+
   useEffect(() => {
-    if (data) {
+    if (frontMatter.api) {
       try {
-        const decoded64JSON = atob(data);
-        const decodedJSON = JSON.parse(decoded64JSON);
-        console.log("this is the new decoded body", decoded64JSON)
+        let decodedJSON = JSON.parse(
+          zlib.inflateSync(Buffer.from(frontMatter.api, 'base64')).toString()
+        );
+        console.log('decodedJSON', decodedJSON);
+        decodedJSON.requestBodyValues = extractPropertiesAndExamples(decodedJSON);
         setDecodedData(decodedJSON);
       } catch (error) {
         console.error('Error parsing JSON:', error);
       }
     }
-  }, [data]);
+  }, [frontMatter.api]);
 
-  const renderTable = (json, tableName = 'Root') => {
-    if (!json) return null;
+  const extractPropertiesAndExamples = (json) => {
+    try {
+      if (!json || !json.requestBody || !json.requestBody.content) return {};
 
-    const nestedTables = [];
+      const content = json.requestBody.content['application/json'];
+      if (!content || !content.schema) return {};
 
-    const iteratedTableRows = Object.entries(json).map(([key, value]) => {
-      if (typeof value === 'object') {
-        // Render nested objects as separate tables
-        nestedTables.push(renderTable(value, key));
-        return null; // Skip rendering this row in the current table
-      } else {
-        let markdownResult = processor.processSync(value).result
-        console.log("markdown result", markdownResult)
-        return (
-          <TableRow key={key}>
-            <TableCell className="font-medium">
-              <h3>{key}</h3>
-              <br></br>
-              {markdownResult}
-              <br></br>
-              <p>Other Text that is important</p>
-            </TableCell>
-          </TableRow>
-        );
-      }
-    });
+      const schema = content.schema;
+      let properties = {};
 
-    let tableRows = [
-      ...iteratedTableRows
-    ] 
+      // Function to extract properties
+      const extract = (schema) => {
+        if (schema.properties) {
+          Object.assign(properties, schema.properties);
+        }
 
-    return (
-      <Accordion type="single" collapsible className="w-full">
-      <AccordionItem value="item-1">
-        <AccordionTrigger>{title}</AccordionTrigger>
-        <AccordionContent>
-      <div key={tableName}>
-        <pre>
-          <code>{JSON.stringify(decodedData, null, 2)}</code>
-        </pre>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>YO</TableCell>
-              <TableCell>Value</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>{tableRows}</TableBody>
-        </Table>
-        {nestedTables}
-      </div>
-      </AccordionContent>
-      </AccordionItem>
-      </Accordion>
-    );
+        ['allOf', 'anyOf', 'oneOf'].forEach((key) => {
+          if (schema[key]) {
+            schema[key].forEach(subSchema => extract(subSchema));
+          }
+        });
+
+        if (schema.$ref) {
+          // Here you should resolve the reference. This is a placeholder logic.
+          console.log(`Reference found: ${schema.$ref}. Implement reference resolution logic.`);
+        }
+      };
+
+      extract(schema);
+
+      // Extract examples if available
+      let exampleObject = content.example || {};
+      Object.keys(properties).forEach((key) => {
+        if (exampleObject[key]) {
+          properties[key].example = exampleObject[key];
+        }
+      });
+
+      return properties;
+    } catch (error) {
+      console.error('Error extracting properties and examples:', error);
+      return {};
+    }
   };
 
-  return <div>{renderTable(decodedData)}</div>;
+
+  return (
+    <div>
+      <div>
+        {decodedData.info && (
+          <>
+            <h2>{decodedData.info.title}</h2>
+            <p>{decodedData.info.description}</p>
+          </>
+        )}
+        {decodedData.parameters && decodedData.parameters.length > 0 && (
+          <>
+            <h3>Parameters:</h3>
+            <ul>
+              {decodedData.parameters.map((param) => (
+                <li key={param.name}>
+                  <strong>{param.name}:</strong> {param.description}
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+        {decodedData?.requestBodyValues && Object.keys(decodedData.requestBodyValues).length > 0 && (
+          <>
+            <h3>Request Body</h3>
+
+              {Object.entries(decodedData.requestBodyValues).map(([key, value]) => (
+                
+                <div style={{ borderTop: '1px solid #eaecef', margin: '24px 0' }} aria-hidden="true" key={key}>
+                  <strong>{key}:</strong> 
+                  <p>{value.description}</p>
+                  <br></br>
+                  Extra Context {JSON.stringify(value)}
+                </div>
+              ))}
+           
+          </>
+        )}
+        {decodedData.securitySchemes && Object.keys(decodedData.securitySchemes).length > 0 && (
+          <>
+            <h3>Security Schemes:</h3>
+            <ul>
+              {Object.entries(decodedData.securitySchemes).map(([key, value]) => (
+                <li key={key}>
+                  <strong>{key}:</strong> {value.description}
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+        {decodedData.postman && decodedData.postman.description && (
+          <>
+            <h3>Postman Configuration:</h3>
+            <p>{decodedData.postman.description.content}</p>
+          </>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default JsonToTable;
