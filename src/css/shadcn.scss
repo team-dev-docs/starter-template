@@ -84,10 +84,26 @@ body {
 
 
 
-
 .markdown {
   li {
+    
     // @apply list-disc list-inside;
   }
 }
 
+.docs-doc-page {
+  .ol, ul, menu {
+    // li {
+    //   list-style: hangul !important;
+    // }
+  }
+}
+
+#__docusaurus_skipToContent_fallback  {
+  ol {
+    list-style: auto;
+  }
+  // ul {
+  //   list-style: auto;
+  // }
+}

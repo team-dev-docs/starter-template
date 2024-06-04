@@ -22,11 +22,11 @@
 
 .sources-container {
   display: flex !important;
-padding: 10px 20px !important;
-flex-direction: column !important;
-align-items: flex-start !important;
-gap: 10px !important;
-align-self: stretch !important;
+  padding: 10px 20px !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 10px !important;
+  align-self: stretch !important;
 }
 
 [data-theme="dark"] .chat-box {
@@ -58,7 +58,7 @@ align-self: stretch !important;
   h6 {
     color: white !important;
   }
-  p {
+  p, ol, ul {
     color: white !important;
   }
 
@@ -103,8 +103,12 @@ align-self: stretch !important;
   h6 {
     color: white !important;
   }
-  p {
+  p, ol, ul {
     color: white !important;
+  }
+
+  ol, ul {
+    padding-left: 2rem;
   }
 
   .chat-header {
@@ -118,12 +122,24 @@ align-self: stretch !important;
   }
 }
 
+.message-input {
+  svg {
+    stroke: $color-1;
+  }
+}
+
 .chat-box__messages {
   height: 80%;
   overflow-y: scroll;
   padding: 10px;
   .chatbot-avatar {
     height: 2.5em;
+  }
+  p, ol, ul {
+    color: white;
+  }
+  ol, ul {
+    padding-left: 2rem;
   }
 }
 
@@ -293,11 +309,11 @@ align-self: stretch !important;
   left: -10px;
   right: -10px;
   bottom: -10px;
-  background: linear-gradient(
-    to right bottom,
-    rgba(255, 255, 255, 0.5),
-    rgba(255, 255, 255, 0.1)
-  );
+  // background: linear-gradient(
+  //   to right bottom,
+  //   rgba(255, 255, 255, 0.5),
+  //   rgba(255, 255, 255, 0.1)
+  // );
   filter: blur(20px);
 }
 
@@ -378,6 +394,29 @@ align-self: stretch !important;
     width: 60px; // Adjust button size for smaller screens
     height: 60px;
   }
+}
+
+.edit-icon {
+  color: var(--text-secondary-light, #a2a1a5);
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+  svg {
+    margin-left: 0.25rem;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.edit-icon:hover {
+  color: var(--text-secondary-light, #a2a1a5);
+  text-decoration: none;
 }
 
 .theme-edit-this-page {
